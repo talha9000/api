@@ -1,5 +1,24 @@
+# Ignore .env files
 .env
+
+# Ignore all shell scripts
 *.sh
+
+# Ignore __pycache__ directories in the root and subdirectories
 __pycache__/
+*/__pycache__/
+
+# Ignore Python bytecode files
 *.pyc
-*/__pycache__
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+env/
+venv/
+
+# Ignore logs
+*.log
+
+# Ignore database files
+*.sqlite3
