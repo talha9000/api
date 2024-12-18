@@ -40,6 +40,17 @@ class MongoDBConnection:
         except Exception as e:
             raise MongoDBError(f"error get collectio due to  {e}")
         
+    async def get_all_collections(self):
+        try:
+            """Retrieve all collections from the database"""
+            if self.db is None:
+                raise Exception("Not connected to the database")
+            
+            # Get the collection names from the database
+            collection_names = await self.db.list_collection_names()
+            return collection_names
+        except Exception as e:
+            raise MongoDBError(f"Error getting collections: {e}")
         
     async def create_collection(self, collection_name: str):
         try:
