@@ -31,14 +31,20 @@ class MongoDBConnection:
             raise MongoDBError(f"ERROR CLOSE TO DB DUE TO {e}")
         
         
-    async def get_collection(self, collection_name: str):
+    async def get_collections(self, collection_name: str) -> bool:
         try:
-            """Retrieve a collection from the database"""
+            """Check if a collection exists in the database"""
             if self.db is None:
                 raise Exception("Not connected to the database")
-            return self.db[collection_name]
+
+            # Check if the collection exists in the database
+            if collection_name in await self.db.list_collection_names():
+                return True
+            else:
+                return False
         except Exception as e:
-            raise MongoDBError(f"error get collectio due to  {e}")
+            raise MongoDBError(f"Error getting collection due to {e}")
+
         
     async def get_all_collections(self):
         try:
@@ -102,7 +108,17 @@ class MongoDBConnection:
             return document
         except Exception as e:
            raise MongoDBError(f"error find collectio due to  {e}")
-            
+
+    async def find_one_projection(self, collection_name: str, query: dict, projection: dict = None):
+        try:
+            """Find a single document based on the query, optionally with projection"""
+            collection = await self.get_collection(collection_name)
+            document = await collection.find_one(query, projection)
+            return document
+        except Exception as e:
+            raise MongoDBError(f"error finding document due to {e}")
+
+
     async def find_many(self, collection_name: str, query: dict = {}, limit: int = 10):
         try:
             """Find many documents based on the query"""

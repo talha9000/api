@@ -16,8 +16,9 @@ async def on_startup():
         uri=f"mongodb://{env_data['usrname']}:{env_data['passwd']}@{env_data['url']}:{env_data['port']}"
         Mongoconnect=MongoDBConnection(uri,'datanal')
         await Mongoconnect.connect()
-      
-         
+        ue=await Mongoconnect.get_collections("users")
+        if not ue:
+            await Mongoconnect.create_collection("users")
     except Exception as e:
         return f"Error during startup: {e}"
 
